@@ -1,0 +1,98 @@
+<div id="preloader">
+  <div class="logoWrapper">
+    <img
+      src="https://i.ibb.co/XfnPMgBG/Chat-GPT-Image-Jul-6-2025-12-23-39-PM.png"
+      alt="Castlegrove Logo"
+      class="logo"
+    />
+    <div class="preloader-text">My Construction</div>
+  </div>
+</div>
+
+<style>
+  @media (max-width: 1023px) {
+    #preloader {
+      display: none !important;
+    }
+  }
+
+  #preloader {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: #141f1e;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    transition: opacity 0.8s ease;
+    padding: 1rem;
+  }
+
+  .logoWrapper {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    width: 90vw;
+    max-width: 420px;
+    padding: 0 1rem;
+    overflow: hidden;
+    white-space: nowrap;
+  }
+
+  .logo {
+    width: clamp(50px, 15vw, 120px);
+    height: auto;
+    transform: translateX(-100%);
+    opacity: 0;
+    animation: slideIn 2.5s ease-out forwards;
+    flex-shrink: 0;
+  }
+
+  .preloader-text {
+    font-weight: 700;
+    font-size: clamp(1.2rem, 5vw, 2.5rem);
+    color: #f5f5f5;
+    transform: translateX(-100%);
+    opacity: 0;
+    animation: slideIn 3.5s ease-out forwards;
+    line-height: 1.2;
+    user-select: none;
+  }
+
+  @keyframes slideIn {
+    0% {
+      transform: translateX(-100%);
+      opacity: 0;
+    }
+    100% {
+      transform: translateX(0);
+      opacity: 1;
+    }
+  }
+
+  #preloader.fade-out {
+    opacity: 0;
+    pointer-events: none;
+  }
+</style>
+<script>
+  window.addEventListener("load", function () {
+    const preloader = document.getElementById("preloader");
+
+    if (window.innerWidth >= 1024) {
+      setTimeout(() => {
+        preloader.classList.add("fade-out");
+      }, 4500);
+
+      setTimeout(() => {
+        preloader.style.display = "none";
+      }, 7300);
+    } else {
+      preloader.style.display = "none";
+    }
+  });
+</script>
+
