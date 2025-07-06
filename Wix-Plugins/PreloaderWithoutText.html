@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title></title>
+  <style>
+    #preloader {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw;
+      height: 100vh;
+      background-color: #3b3c3e;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+      transition: opacity 0.8s ease;
+      padding: 1rem;
+    }
+
+    .logoWrapper {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 90vw;
+      max-width: 640px;
+      padding: 0 1rem;
+      overflow: hidden;
+    }
+
+    .logo {
+      width: clamp(120px, 52vw, 340px);
+      height: auto;
+      transform: translateX(-100%);
+      opacity: 0;
+      animation: slideIn 2s ease-out forwards;
+    }
+
+    @keyframes slideIn {
+      0% {
+        transform: translateX(-100%);
+        opacity: 0;
+      }
+      100% {
+        transform: translateX(0);
+        opacity: 1;
+      }
+    }
+
+    #preloader.fade-out {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    @media (max-width: 1024px) {
+      #preloader {
+        display: none !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div id="preloader">
+    <div class="logoWrapper">
+      <img
+        src="https://i.ibb.co/twB7kJVH/Whats-App-Image-2025-07-06-at-14-30-34-24193221-removebg-preview.png"
+        alt="Castlegrove Logo"
+        class="logo"
+      />
+    </div>
+  </div>
+
+  <script>
+    window.addEventListener("load", function () {
+      const preloader = document.getElementById("preloader");
+      if (window.innerWidth > 1024) {
+        setTimeout(() => {
+          preloader.classList.add("fade-out");
+        }, 2500);
+        setTimeout(() => {
+          preloader.style.display = "none";
+        }, 3300);
+      } else {
+        preloader.style.display = "none";
+      }
+    });
+  </script>
+</body>
+</html>
