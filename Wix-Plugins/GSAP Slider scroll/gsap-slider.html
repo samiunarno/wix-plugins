@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>GSAP Scroll Swipe Slides</title>
+
+  <!-- GSAP CDN -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/Observer.min.js"></script>
+
+  <!-- Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Sora&display=swap" rel="stylesheet">
+
+  <style>
+    @font-face {
+      font-family: "Bandeins Sans & Strange Variable";
+      src: url("https://res.cloudinary.com/dldmpwpcp/raw/upload/v1566406079/BandeinsStrangeVariable_esetvq.ttf");
+    }
+
+    * {
+      box-sizing: border-box;
+      user-select: none;
+    }
+
+    html, body {
+      overflow: hidden;
+      margin: 0;
+      padding: 0;
+      height: 100vh;
+    }
+
+    body {
+      font-family: "Sora", sans-serif;
+      background-color: #4361ee;
+      color: #fff;
+    }
+
+    .slide {
+      position: fixed;
+      width: 100%;
+      height: 100%;
+      visibility: hidden;
+    }
+
+    .slide__outer, .slide__inner {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+    }
+
+    .slide__content {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+      width: 100%;
+    }
+
+    .slide__container {
+      position: relative;
+      width: 90%;
+      max-width: 1400px;
+      margin: auto;
+      height: 90vh;
+      display: grid;
+      grid-template-columns: repeat(10, 1fr);
+      grid-template-rows: repeat(10, 1fr);
+    }
+
+    .slide__heading {
+  --width: 200;
+  font-family: "Bandeins Sans & Strange Variable";
+  font-size: clamp(4rem, 15vw, 10rem);
+  font-weight: 900;
+  font-variation-settings: "wdth" var(--width);
+  color: #f2f1fc;
+  grid-area: 2 / 2 / 3 / 10;
+
+  /* Force it to stay on top */
+  z-index: 9999 !important;
+  position: relative !important;
+
+  /* Optional: add background or shadow if still hard to see */
+  /* background: rgba(0, 0, 0, 0.3); */
+  /* text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.7); */
+}
+
+
+    .slide__img-cont {
+      grid-area: 3 / 1 / 8 / 8;
+      margin-top: 2rem;
+      z-index: 1;
+      position: relative;
+    }
+
+    .slide__img-cont img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      z-index: 1;
+      position: relative;
+    }
+
+    .overlay {
+      position: fixed;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      z-index: 2;
+    }
+
+    .overlay__content {
+      max-width: 1400px;
+      width: 90%;
+      margin: auto;
+      height: 90vh;
+      display: grid;
+      grid-template-columns: repeat(10, 1fr);
+      grid-template-rows: repeat(10, 1fr);
+    }
+
+    .overlay__img-cont {
+      grid-area: 4 / 3 / 9 / 11;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .overlay__img-cont img {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .overlay__count {
+      grid-area: 3 / 10 / 4 / 11;
+      font-size: 2rem;
+      text-align: right;
+      border-bottom: 5px solid white;
+    }
+
+    .slide:nth-of-type(1) {
+      visibility: visible;
+    }
+
+    .slide:nth-of-type(1) .slide__content {
+      background-color: #6d597a;
+    }
+
+    .slide:nth-of-type(2) .slide__content {
+      background-color: #355070;
+    }
+
+    .slide:nth-of-type(3) .slide__content {
+      background-color: #b56576;
+    }
+
+    .slide:nth-of-type(4) .slide__content {
+      background-color: #9a8c98;
+    }
+
+    footer {
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+      text-align: center;
+      padding: 1rem;
+      font-size: 1rem;
+      background-color: rgba(0, 0, 0, 0.2);
+      z-index: 999;
+    }
+
+    a {
+      color: #fff;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Slides -->
+  <section class="slide">
+    <div class="slide__outer">
+      <div class="slide__inner">
+        <div class="slide__content">
+          <div class="slide__container">
+            <h2 class="slide__heading">SCROLL</h2>
+            <div class="slide__img-cont">
+              <img class="slide__img" src="https://images.unsplash.com/photo-1567016376408-0226e4d0c1ea?w=400" alt="" />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="slide">
+    <div class="slide__outer">
+      <div class="slide__inner">
+        <div class="slide__content">
+          <div class="slide__container">
+            <h2 class="slide__heading">SWIPE</h2>
+            <div class="slide__img-cont">
+              <img class="slide__img" src="https://images.unsplash.com/photo-1558603668-6570496b66f8?w=400" alt="" />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="slide">
+    <div class="slide__outer">
+      <div class="slide__inner">
+        <div class="slide__content">
+          <div class="slide__container">
+            <h2 class="slide__heading">SCROLL</h2>
+            <div class="slide__img-cont">
+              <img class="slide__img" src="https://images.unsplash.com/photo-1537165924986-cc3568f5d454?w=400" alt="" />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="slide">
+    <div class="slide__outer">
+      <div class="slide__inner">
+        <div class="slide__content">
+          <div class="slide__container">
+            <h2 class="slide__heading">SWIPE</h2>
+            <div class="slide__img-cont">
+              <img class="slide__img" src="https://images.unsplash.com/photo-1589271243958-d61e12b61b97?w=400" alt="" />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Overlay -->
+  <section class="overlay">
+    <div class="overlay__content">
+      <p class="overlay__count">0<span class="count">1</span></p>
+      <div class="overlay__img-cont">
+        <img class="image" src="https://images.unsplash.com/photo-1519710164239-da123dc03ef4?w=800" />
+        <img class="image" src="https://images.unsplash.com/photo-1594666757003-3ee20de41568?w=800" />
+        <img class="image" src="https://images.unsplash.com/photo-1579830341096-05f2f31b8259?w=800" />
+        <img class="image" src="https://images.unsplash.com/photo-1603771628302-c32c88e568e3?w=800" />
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <a href="https://greensock.com/docs/v3/Plugins/ScrollTrigger/static.observe/">ScrollTrigger.observe() Docs</a> — GSAP Demo
+  </footer>
+
+  <script>
+    console.clear();
+
+    const sections = gsap.utils.toArray(".slide");
+    const images = gsap.utils.toArray(".image").reverse();
+    const slideImages = gsap.utils.toArray(".slide__img");
+    const outerWrappers = gsap.utils.toArray(".slide__outer");
+    const innerWrappers = gsap.utils.toArray(".slide__inner");
+    const count = document.querySelector(".count");
+    const wrap = gsap.utils.wrap(0, sections.length);
+    let animating = false;
+    let currentIndex = 0;
+
+    gsap.set(outerWrappers, { xPercent: 100 });
+    gsap.set(innerWrappers, { xPercent: -100 });
+    gsap.set(".slide:nth-of-type(1) .slide__outer", { xPercent: 0 });
+    gsap.set(".slide:nth-of-type(1) .slide__inner", { xPercent: 0 });
+
+    function gotoSection(index, direction) {
+      if (animating) return;
+      animating = true;
+
+      index = wrap(index);
+
+      const currentSection = sections[currentIndex];
+      const nextSection = sections[index];
+      const heading = currentSection.querySelector(".slide__heading");
+      const nextHeading = nextSection.querySelector(".slide__heading");
+
+      gsap.set([sections, images], { zIndex: 0, autoAlpha: 0 });
+      gsap.set([sections[currentIndex], images[index]], { zIndex: 1, autoAlpha: 1 });
+      gsap.set([sections[index], images[currentIndex]], { zIndex: 2, autoAlpha: 1 });
+
+      gsap.timeline({
+        defaults: { duration: 1, ease: "expo.inOut" },
+        onComplete: () => {
+          animating = false;
+          currentIndex = index;
+        }
+      })
+      .set(count, { text: index + 1 }, 0.3)
+      .fromTo(outerWrappers[index], { xPercent: 100 * direction }, { xPercent: 0 }, 0)
+      .fromTo(innerWrappers[index], { xPercent: -100 * direction }, { xPercent: 0 }, 0)
+      .to(heading, { "--width": 800, xPercent: 30 * direction }, 0)
+      .fromTo(nextHeading, { "--width": 800, xPercent: -30 * direction }, { "--width": 200, xPercent: 0 }, 0)
+      .fromTo(images[index], { xPercent: 125 * direction, scaleX: 1.5, scaleY: 1.3 }, { xPercent: 0, scaleX: 1, scaleY: 1 }, 0)
+      .fromTo(images[currentIndex], { xPercent: 0 }, { xPercent: -125 * direction, scaleX: 1.5, scaleY: 1.3 }, 0)
+      .fromTo(slideImages[index], { scale: 2 }, { scale: 1 }, 0)
+      .timeScale(0.8);
+    }
+
+    Observer.create({
+      type: "wheel,touch,pointer",
+      preventDefault: true,
+      wheelSpeed: -1,
+      onUp: () => gotoSection(currentIndex + 1, 1),
+      onDown: () => gotoSection(currentIndex - 1, -1),
+      tolerance: 10
+    });
+
+    document.addEventListener("keydown", (e) => {
+      if (["ArrowDown", "ArrowRight", "Space", "Enter"].includes(e.code) && !animating) {
+        gotoSection(currentIndex + 1, 1);
+      }
+      if (["ArrowUp", "ArrowLeft"].includes(e.code) && !animating) {
+        gotoSection(currentIndex - 1, -1);
+      }
+    });
+  </script>
+</body>
+</html>
