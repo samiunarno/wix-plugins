@@ -1,1 +1,353 @@
-.fdsgdfghdfgdfs
+1. Implementing GSAP Scroll Swipe Slides in React
+Key points:
+Use React refs to access DOM elements.
+
+Initialize GSAP animations inside useEffect after component mounts.
+
+Clean up animations on unmount.
+
+Use useState or useRef for animation state variables.
+
+Basic React steps:
+jsx
+Copy
+Edit
+import React, { useEffect, useRef } from 'react';
+import gsap from 'gsap';
+import { Observer } from 'gsap/Observer';
+
+gsap.registerPlugin(Observer);
+
+const slidesData = [
+  { heading: "SCROLL", img: "https://images.unsplash.com/photo-1567016376408-0226e4d0c1ea?w=400" },
+  { heading: "SWIPE", img: "https://images.unsplash.com/photo-1558603668-6570496b66f8?w=400" },
+  // add more slides...
+];
+
+export default function SlideShow() {
+  const sectionsRef = useRef([]);
+  const animating = useRef(false);
+  const currentIndex = useRef(0);
+
+  useEffect(() => {
+    gsap.set(sectionsRef.current, { xPercent: 100, autoAlpha: 0 });
+    gsap.set(sectionsRef.current[0], { xPercent: 0, autoAlpha: 1 });
+
+    function gotoSection(index, direction) {
+      if (animating.current) return;
+      animating.current = true;
+
+      const wrapIndex = (i) => (i + slidesData.length) % slidesData.length;
+      index = wrapIndex(index);
+
+      const current = sectionsRef.current[currentIndex.current];
+      const next = sectionsRef.current[index];
+
+      const tl = gsap.timeline({
+        defaults: { duration: 1, ease: 'expo.inOut' },
+        onComplete: () => {
+          animating.current = false;
+          currentIndex.current = index;
+        }
+      });
+
+      tl.to(current, { xPercent: -100 * direction, autoAlpha: 0 })
+        .fromTo(next, { xPercent: 100 * direction, autoAlpha: 0 }, { xPercent: 0, autoAlpha: 1 });
+
+      // Add more animations for headings/images as needed
+    }
+
+    Observer.create({
+      type: "wheel,touch,pointer",
+      wheelSpeed: -1,
+      onUp: () => gotoSection(currentIndex.current + 1, 1),
+      onDown: () => gotoSection(currentIndex.current - 1, -1),
+      tolerance: 10
+    });
+
+    // Optional: add keydown listeners here
+
+    // Cleanup on unmount
+    return () => Observer.killAll();
+  }, []);
+
+  return (
+    <div>
+      {slidesData.map((slide, i) => (
+        <section
+          key={i}
+          ref={el => (sectionsRef.current[i] = el)}
+          className="slide"
+          style={{ 
+            position: 'fixed', 
+            width: '100%', 
+            height: '100%', 
+            visibility: 'hidden' 
+          }}
+        >
+          <h2>{slide.heading}</h2>
+          <img src={slide.img} alt="" />
+        </section>
+      ))}
+    </div>
+  );
+}
+Note: Style with CSS as in your original example, or use inline styles / CSS modules.
+
+2. Implementing in Next.js
+Since Next.js is React-based, implementation is almost identical to React. Key differences:
+
+Put the above React component in /components or directly in a page file (pages/index.js).
+
+Import GSAP and register plugins inside useEffect to avoid SSR issues.
+
+Make sure your images have priority or loading="lazy" as per Next.js optimizations.
+
+Example snippet in Next.js page:
+
+jsx
+Copy
+Edit
+import dynamic from 'next/dynamic';
+
+const SlideShow = dynamic(() => import('../components/SlideShow'), { ssr: false });
+
+export default function Home() {
+  return <SlideShow />;
+}
+This disables server-side rendering for the slideshow (since GSAP depends on window and DOM).
+
+3. Implementing in Wix
+Wix uses Velo by Wix (Wix’s built-in dev platform). It doesn’t allow direct DOM manipulation as freely as React/Next.js, but you can still use GSAP by:
+
+Steps:
+Upload GSAP libraries or add via CDN in your page's settings or in your Velo backend.
+
+Add your slide elements using Wix Editor, give them IDs (like #slide1, #slide2).
+
+In your page’s Velo code panel:
+
+js
+Copy
+Edit
+import { gsap } from 'gsap';
+import { Observer } from 'gsap/Observer';
+
+$w.onReady(() => {
+  gsap.registerPlugin(Observer);
+
+  let slides = [$w('#slide1'), $w('#slide2'), $w('#slide3')];
+  let currentIndex = 0;
+  let animating = false;
+
+  function gotoSection(index, direction) {
+    if (animating) return;
+    animating = true;
+
+    index = (index + slides.length) % slides.length;
+    let currentSlide = slides[currentIndex];
+    let nextSlide = slides[index];
+
+    gsap.timeline({
+      defaults: { duration: 1, ease: "expo.inOut" },
+      onComplete: () => {
+        animating = false;
+        currentIndex = index;
+      }
+    })
+    .to(currentSlide, { xPercent: -100 * direction, opacity: 0 })
+    .fromTo(nextSlide, { xPercent: 100 * direction, opacity: 0 }, { xPercent: 0, opacity: 1 });
+  }
+
+  Observer.create({
+    type: "wheel,touch,pointer",
+    onUp: () => gotoSection(currentIndex + 1, 1),
+    onDown: () => gotoSection(currentIndex - 1, -1)
+  });
+
+  // Add key listeners if needed
+});
+Use Wix Editor to style your slides and add content.
+
+Summary
+Platform	How to Implement GSAP Slides	Key Tips
+React	Use refs + useEffect for GSAP init + cleanup	Use functional components, keep animation logic inside useEffect
+Next.js	Same as React, disable SSR for GSAP-dependent parts	Use dynamic import with { ssr: false }
+Wix (Velo)	Use Wix Editor for DOM, Velo code panel for GSAP	Access elements via $w selectors, careful with DOM
+
+Implementing GSAP Scroll Swipe Slides in React
+Key points:
+Use React refs to access DOM elements.
+
+Initialize GSAP animations inside useEffect after component mounts.
+
+Clean up animations on unmount.
+
+Use useState or useRef for animation state variables.
+
+Basic React steps:
+jsx
+Copy
+Edit
+import React, { useEffect, useRef } from 'react';
+import gsap from 'gsap';
+import { Observer } from 'gsap/Observer';
+
+gsap.registerPlugin(Observer);
+
+const slidesData = [
+  { heading: "SCROLL", img: "https://images.unsplash.com/photo-1567016376408-0226e4d0c1ea?w=400" },
+  { heading: "SWIPE", img: "https://images.unsplash.com/photo-1558603668-6570496b66f8?w=400" },
+  // add more slides...
+];
+
+export default function SlideShow() {
+  const sectionsRef = useRef([]);
+  const animating = useRef(false);
+  const currentIndex = useRef(0);
+
+  useEffect(() => {
+    gsap.set(sectionsRef.current, { xPercent: 100, autoAlpha: 0 });
+    gsap.set(sectionsRef.current[0], { xPercent: 0, autoAlpha: 1 });
+
+    function gotoSection(index, direction) {
+      if (animating.current) return;
+      animating.current = true;
+
+      const wrapIndex = (i) => (i + slidesData.length) % slidesData.length;
+      index = wrapIndex(index);
+
+      const current = sectionsRef.current[currentIndex.current];
+      const next = sectionsRef.current[index];
+
+      const tl = gsap.timeline({
+        defaults: { duration: 1, ease: 'expo.inOut' },
+        onComplete: () => {
+          animating.current = false;
+          currentIndex.current = index;
+        }
+      });
+
+      tl.to(current, { xPercent: -100 * direction, autoAlpha: 0 })
+        .fromTo(next, { xPercent: 100 * direction, autoAlpha: 0 }, { xPercent: 0, autoAlpha: 1 });
+
+      // Add more animations for headings/images as needed
+    }
+
+    Observer.create({
+      type: "wheel,touch,pointer",
+      wheelSpeed: -1,
+      onUp: () => gotoSection(currentIndex.current + 1, 1),
+      onDown: () => gotoSection(currentIndex.current - 1, -1),
+      tolerance: 10
+    });
+
+    // Optional: add keydown listeners here
+
+    // Cleanup on unmount
+    return () => Observer.killAll();
+  }, []);
+
+  return (
+    <div>
+      {slidesData.map((slide, i) => (
+        <section
+          key={i}
+          ref={el => (sectionsRef.current[i] = el)}
+          className="slide"
+          style={{ 
+            position: 'fixed', 
+            width: '100%', 
+            height: '100%', 
+            visibility: 'hidden' 
+          }}
+        >
+          <h2>{slide.heading}</h2>
+          <img src={slide.img} alt="" />
+        </section>
+      ))}
+    </div>
+  );
+}
+Note: Style with CSS as in your original example, or use inline styles / CSS modules.
+
+2. Implementing in Next.js
+Since Next.js is React-based, implementation is almost identical to React. Key differences:
+
+Put the above React component in /components or directly in a page file (pages/index.js).
+
+Import GSAP and register plugins inside useEffect to avoid SSR issues.
+
+Make sure your images have priority or loading="lazy" as per Next.js optimizations.
+
+Example snippet in Next.js page:
+
+jsx
+Copy
+Edit
+import dynamic from 'next/dynamic';
+
+const SlideShow = dynamic(() => import('../components/SlideShow'), { ssr: false });
+
+export default function Home() {
+  return <SlideShow />;
+}
+This disables server-side rendering for the slideshow (since GSAP depends on window and DOM).
+
+3. Implementing in Wix
+Wix uses Velo by Wix (Wix’s built-in dev platform). It doesn’t allow direct DOM manipulation as freely as React/Next.js, but you can still use GSAP by:
+
+Steps:
+Upload GSAP libraries or add via CDN in your page's settings or in your Velo backend.
+
+Add your slide elements using Wix Editor, give them IDs (like #slide1, #slide2).
+
+In your page’s Velo code panel:
+
+js
+Copy
+Edit
+import { gsap } from 'gsap';
+import { Observer } from 'gsap/Observer';
+
+$w.onReady(() => {
+  gsap.registerPlugin(Observer);
+
+  let slides = [$w('#slide1'), $w('#slide2'), $w('#slide3')];
+  let currentIndex = 0;
+  let animating = false;
+
+  function gotoSection(index, direction) {
+    if (animating) return;
+    animating = true;
+
+    index = (index + slides.length) % slides.length;
+    let currentSlide = slides[currentIndex];
+    let nextSlide = slides[index];
+
+    gsap.timeline({
+      defaults: { duration: 1, ease: "expo.inOut" },
+      onComplete: () => {
+        animating = false;
+        currentIndex = index;
+      }
+    })
+    .to(currentSlide, { xPercent: -100 * direction, opacity: 0 })
+    .fromTo(nextSlide, { xPercent: 100 * direction, opacity: 0 }, { xPercent: 0, opacity: 1 });
+  }
+
+  Observer.create({
+    type: "wheel,touch,pointer",
+    onUp: () => gotoSection(currentIndex + 1, 1),
+    onDown: () => gotoSection(currentIndex - 1, -1)
+  });
+
+  // Add key listeners if needed
+});
+Use Wix Editor to style your slides and add content.
+
+Summary
+Platform	How to Implement GSAP Slides	Key Tips
+React	Use refs + useEffect for GSAP init + cleanup	Use functional components, keep animation logic inside useEffect
+Next.js	Same as React, disable SSR for GSAP-dependent parts	Use dynamic import with { ssr: false }
+Wix (Velo)	Use Wix Editor for DOM, Velo code panel for GSAP	Access elements via $w selectors, careful with DOM
