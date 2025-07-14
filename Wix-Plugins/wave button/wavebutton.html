@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Wave Button </title>
+  <style>
+    .custom-button {
+      border: none;
+      border-radius: 30px;
+      box-shadow: 0 0 10px #33333391;
+      cursor: pointer;
+      display: block;
+      height: 52px;
+      overflow: hidden;
+      position: relative;
+      text-transform: uppercase;
+      width: 150px;
+      z-index: 200;
+      background: transparent;
+    }
+
+    .custom-button span {
+      color: #fff;
+      position: relative;
+      text-align: center;
+      z-index: 1;
+      font-family: sans-serif;
+      font-weight: bold;
+      font-size: 16px;
+    }
+
+    .liquid-effect {
+      background: #ff4949;
+      box-shadow: inset 0 0 50px #00000080;
+      height: 200px;
+      width: 200px;
+      position: absolute;
+      top: -80px;
+      left: 0;
+      transition: 1s;
+    }
+
+    .liquid-effect::before,
+    .liquid-effect::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 50%;
+      width: 200%;
+      height: 200%;
+      transform: translate(-50%, -75%);
+    }
+
+    .liquid-effect::before {
+      animation: waveRotate 5s linear infinite;
+      background: #141414;
+      border-radius: 45%;
+    }
+
+    .liquid-effect::after {
+      animation: waveRotate 10s linear infinite;
+      background: #14141480;
+      border-radius: 40%;
+    }
+
+    .custom-button:hover .liquid-effect {
+      top: -120px;
+    }
+
+    @keyframes waveRotate {
+      0% {
+        transform: translate(-60%, -75%) rotate(0);
+      }
+      100% {
+        transform: translate(-60%, -75%) rotate(1turn);
+      }
+    }
+
+    .gradient-button {
+      animation: gradientBG 2s ease infinite;
+      background: linear-gradient(90deg, #9513d1, #d109b6, #9513d1, #d109b6);
+      background-size: 400% 400%;
+      color: #fff;
+      cursor: pointer;
+    }
+
+    @keyframes gradientBG {
+      0% {
+        background-position: 0 50%;
+      }
+      50% {
+        background-position: 100% 50%;
+      }
+      100% {
+        background-position: 0 50%;
+      }
+    }
+
+    .line-height-40 {
+      line-height: 40px;
+    }
+
+    .line-height-32 {
+      line-height: 32px;
+    }
+  </style>
+</head>
+<body>
+
+  <button type="button" class="custom-button">
+    <span>Hire Us</span>
+    <div class="liquid-effect"></div>
+  </button>
+
+</body>
+</html>
